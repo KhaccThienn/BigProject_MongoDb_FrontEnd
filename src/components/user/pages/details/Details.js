@@ -1,15 +1,42 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import * as BookServices from "../../../../services/BookService"
+import * as WishlistServices from "../../../../services/WishlistServices"
+import { useSelector } from 'react-redux';
+import { selectUserData } from './../../../../redux/reducers/user';
+import Swal from 'sweetalert2';
 function Details() {
     const { id } = useParams();
     const [apiData, setApiData] = useState({});
-
+    const userData = useSelector(selectUserData);
+    const navigate = useNavigate()
     const fetchApiData = async (id) => {
         const [data, error] = await BookServices.getBookByID(id)
         if (data) {
             console.log(data);
             setApiData(data);
+        }
+        if (error) {
+            console.log(error);
+        }
+    }
+
+    const handleAddToWishlist = async (data) => {
+        const addData = {
+            userId: userData.user._id,
+            payload: data
+        }
+        const [result, error] = await WishlistServices.addToWishlist(addData)
+        if (result) {
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: result,
+                showConfirmButton: false,
+                timer: 1500
+            })
+            navigate("/wishlist");
+            console.log(result);
         }
         if (error) {
             console.log(error);
@@ -37,117 +64,11 @@ function Details() {
                                     >
                                         <div className="iq-card-body p-0">
                                             <div className="row align-items-center">
-                                                <div className="col-3">
-                                                    <ul
-                                                        id="description-slider-nav"
-                                                        className="list-inline p-0 m-0 d-flex align-items-center"
-                                                    >
-                                                        <li>
-                                                            <a href="javascript:void(0);">
-                                                                <img
-                                                                    src="images/book-dec/01.jpg"
-                                                                    className="img-fluid rounded w-100"
-                                                                    alt=""
-                                                                />
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="javascript:void(0);">
-                                                                <img
-                                                                    src="images/book-dec/02.jpg"
-                                                                    className="img-fluid rounded w-100"
-                                                                    alt=""
-                                                                />
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="javascript:void(0);">
-                                                                <img
-                                                                    src="images/book-dec/03.jpg"
-                                                                    className="img-fluid rounded w-100"
-                                                                    alt=""
-                                                                />
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="javascript:void(0);">
-                                                                <img
-                                                                    src="images/book-dec/04.jpg"
-                                                                    className="img-fluid rounded w-100"
-                                                                    alt=""
-                                                                />
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="javascript:void(0);">
-                                                                <img
-                                                                    src="images/book-dec/05.jpg"
-                                                                    className="img-fluid rounded w-100"
-                                                                    alt=""
-                                                                />
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="javascript:void(0);">
-                                                                <img
-                                                                    src="images/book-dec/06.jpg"
-                                                                    className="img-fluid rounded w-100"
-                                                                    alt=""
-                                                                />
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div className="col-9">
+                                                <div className="col-12">
                                                     <ul
                                                         id="description-slider"
                                                         className="list-inline p-0 m-0 d-flex align-items-center"
                                                     >
-                                                        <li>
-                                                            <a href="javascript:void(0);">
-                                                                <img
-                                                                    src="images/new_realeases/img01.jpg"
-                                                                    className="img-fluid w-100 rounded"
-                                                                    alt=""
-                                                                />
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="javascript:void(0);">
-                                                                <img
-                                                                    src="images/book-dec/02.jpg"
-                                                                    className="img-fluid w-100 rounded"
-                                                                    alt=""
-                                                                />
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="javascript:void(0);">
-                                                                <img
-                                                                    src="images/book-dec/03.jpg"
-                                                                    className="img-fluid w-100 rounded"
-                                                                    alt=""
-                                                                />
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="javascript:void(0);">
-                                                                <img
-                                                                    src="images/book-dec/04.jpg"
-                                                                    className="img-fluid w-100 rounded"
-                                                                    alt=""
-                                                                />
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="javascript:void(0);">
-                                                                <img
-                                                                    src="images/book-dec/05.jpg"
-                                                                    className="img-fluid w-100 rounded"
-                                                                    alt=""
-                                                                />
-                                                            </a>
-                                                        </li>
                                                         <li>
                                                             <a href="javascript:void(0);">
                                                                 <img
@@ -202,12 +123,13 @@ function Details() {
                                                 >
                                             </div> */}
                                             <div className="mb-3">
-                                                <a href="#" className="text-body text-center"
-                                                ><span
-                                                    className="avatar-30 rounded-circle bg-primary d-inline-block mr-2"
-                                                ><i className="ri-heart-fill"></i></span
-                                                    ><span>Thêm vào danh sách yêu thích</span></a
-                                                >
+                                                <button onClick={() => handleAddToWishlist(apiData)} className="btn text-body text-center">
+                                                    <span className="avatar-30 rounded-circle bg-primary d-inline-block mr-2" >
+                                                        <i className="ri-heart-fill"></i>
+                                                    </span><span>
+                                                        Thêm vào danh sách yêu thích
+                                                    </span>
+                                                </button>
                                             </div>
                                             <div className="iq-social d-flex align-items-center">
                                                 <h5 className="mr-2">Chia sẻ:</h5>

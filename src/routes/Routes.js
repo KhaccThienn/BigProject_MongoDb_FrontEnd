@@ -10,6 +10,7 @@ import BookByCategory from "../components/user/pages/category/BookByCategory"
 import Details from "../components/user/pages/details/Details"
 import Home from "../components/user/pages/home/Home"
 import Shop from "../components/user/pages/shop/Shop"
+import Wishlist from "../components/user/pages/wishlist/Wishlist"
 import UserMasterLayout from './../components/user/layouts/UserMasterLayout';
 
 
@@ -48,7 +49,11 @@ export const clientRoutes = [
     {
         path: "/details/:id",
         element: <UserMasterLayout child={<Details />} />
-    }
+    },
+    {
+        path: "/wishlist",
+        element: <UserMasterLayout child={<Wishlist />} />
+    },
 ]
 
 export const adminRoutes = [

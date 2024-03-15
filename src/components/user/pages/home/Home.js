@@ -1,11 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import * as BookServices from "../../../../services/BookService"
+import * as UserService from "../../../../services/UserService"
 import { useSelector } from 'react-redux'
 import { selectUserData } from '../../../../redux/reducers/user'
 function Home() {
+    const initUserData = {
+        createdAt: "",
+        email: "",
+        profileImg: "",
+        role_id: 0,
+        updatedAt: "",
+        username: "",
+        wishList: [],
+        __v: "",
+        _id: ""
+    }
     const [apiData, setApiData] = useState([])
     const userData = useSelector(selectUserData);
+    const [user, setUser] = useState(initUserData)
+
     const fetchApiData = async () => {
         const [data, err] = await BookServices.getAllAndLimit();
         if (data) {
@@ -17,9 +31,20 @@ function Home() {
         }
     }
 
+    const fetchUserData = async (id) => {
+        const [data, err] = await UserService.getOneUser(id);
+        if (data) {
+            console.log(data);
+            setUser(data);
+        }
+        if (err) {
+            console.log(err);
+        }
+    }
     useEffect(() => {
         fetchApiData()
-    }, [])
+        userData.user._id && fetchUserData(userData.user._id)
+    }, [userData.user._id])
 
     return (
         <div className="container-fluid">
@@ -63,10 +88,10 @@ function Home() {
                                                                 <div className="price d-flex align-items-center">
                                                                     <h6><b>$ {e.price}</b></h6>
                                                                 </div>
-                                                                <div className="iq-product-action">
+                                                                {/* <div className="iq-product-action">
                                                                     <a href="#" className="ml-2"><i
                                                                         className="ri-heart-fill text-danger"></i></a>
-                                                                </div>
+                                                                </div> */}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -95,48 +120,28 @@ function Home() {
                                 </div>
                                 <div className="iq-card-body favorites-contens">
                                     <ul id="favorites-slider" className="list-inline p-0 mb-0 row">
-                                        <li className="col-md-4">
-                                            <div className="d-flex align-items-center">
-                                                <div className="col-5 p-0 position-relative">
-                                                    <a href="#">
-                                                        <img src="images/favorite/01.jpg" className="img-fluid rounded w-100" alt="" />
-                                                    </a>
-                                                </div>
-                                                <div className="col-7">
-                                                    <h5 className="mb-2">D. Trump - Nghệ Thuật Đàm Phán</h5>
-                                                    <p className="mb-2">Tác giả : Pedro Araez</p>
-                                                    <a href="#" className="text-dark">Đọc ngay<i className="ri-arrow-right-s-line"></i></a>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li className="col-md-4">
-                                            <div className="d-flex align-items-center">
-                                                <div className="col-5 p-0 position-relative">
-                                                    <a href="#">
-                                                        <img src="images/favorite/01.jpg" className="img-fluid rounded w-100" alt="" />
-                                                    </a>
-                                                </div>
-                                                <div className="col-7">
-                                                    <h5 className="mb-2">D. Trump - Nghệ Thuật Đàm Phán</h5>
-                                                    <p className="mb-2">Tác giả : Pedro Araez</p>
-                                                    <a href="#" className="text-dark">Đọc ngay<i className="ri-arrow-right-s-line"></i></a>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li className="col-md-4">
-                                            <div className="d-flex align-items-center">
-                                                <div className="col-5 p-0 position-relative">
-                                                    <a href="#">
-                                                        <img src="images/favorite/01.jpg" className="img-fluid rounded w-100" alt="" />
-                                                    </a>
-                                                </div>
-                                                <div className="col-7">
-                                                    <h5 className="mb-2">D. Trump - Nghệ Thuật Đàm Phán</h5>
-                                                    <p className="mb-2">Tác giả : Pedro Araez</p>
-                                                    <a href="#" className="text-dark">Đọc ngay<i className="ri-arrow-right-s-line"></i></a>
-                                                </div>
-                                            </div>
-                                        </li>
+                                        {
+                                            (user.wishList.length > 0) ? user.wishList.map((e, i) => {
+                                                return (
+                                                    <li className="col-md-4" key={i}>
+                                                        <div className="d-flex align-items-center">
+                                                            <div className="col-5 p-0 position-relative">
+                                                                <a href="#">
+                                                                    <img src={e.image} className="img-fluid rounded w-100" alt={e.title} />
+                                                                </a>
+                                                            </div>
+                                                            <div className="col-7">
+                                                                <h5 className="mb-2">{e.title}</h5>
+                                                                <p className="mb-2">Tác giả : {e.author}</p>
+                                                                <Link to={`/details/${e._id}`} className="text-dark">Đọc ngay<i className="ri-arrow-right-s-line"></i></Link>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                )
+                                            }) : <div className='ml-4'>Chưa có sách nào trong mục yêu thích của bạn.</div>
+                                        }
+
+
                                     </ul>
                                 </div>
                             </div>
