@@ -4,7 +4,7 @@ function HomeAdmin() {
     return (
         <div className="container-fluid">
             <div className="row">
-                <div className="col-md-6 col-lg-3">
+                {/* <div className="col-md-6 col-lg-3">
                     <div className="iq-card iq-card-block iq-card-stretch iq-card-height">
                         <div className="iq-card-body">
                             <div className="d-flex align-items-center">
@@ -55,7 +55,7 @@ function HomeAdmin() {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     )

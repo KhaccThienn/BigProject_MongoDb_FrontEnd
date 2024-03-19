@@ -4,6 +4,7 @@ import * as CategoryService from "../../../../services/CategoryService"
 function BookByCategory() {
     const { id } = useParams();
     const [apiData, setApiData] = useState([])
+    const [categoryData, setCategoryData] = useState({})
     const [searchData, setSearchData] = useState([])
     const [searchString, setSearchString] = useState('');
 
@@ -12,6 +13,7 @@ function BookByCategory() {
         if (data) {
             console.log(data);
             setApiData(data.books);
+            setCategoryData(data)
         }
         if (err) {
             console.log(err);
@@ -41,7 +43,8 @@ function BookByCategory() {
                 <div className="col-lg-12">
                     <div className="iq-card-transparent mb-0">
                         <div className="d-block text-center">
-                            <h2 className="mb-3">Search by Book Name</h2>
+                            <h2 className="mb-3">Danh mục: {categoryData.name}</h2>
+                            <p className='text-center'>{categoryData.description}</p>
                             <div className="w-100 iq-search-filter">
                                 <ul
                                     className="list-inline p-0 m-0 row justify-content-center search-menu-options"

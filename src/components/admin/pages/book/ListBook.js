@@ -97,7 +97,7 @@ function ListBook() {
                                                             />
                                                         </td>
                                                         <td>{e.title}</td>
-                                                        <td>{e.category.name}</td>
+                                                        <td>{e.category?.name}</td>
                                                         <td>{e.author}</td>
                                                         <td>
                                                             <p className="mb-0">

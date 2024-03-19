@@ -122,15 +122,18 @@ function Details() {
                                                 >Mua ngay</a
                                                 >
                                             </div> */}
-                                            <div className="mb-3">
-                                                <button onClick={() => handleAddToWishlist(apiData)} className="btn text-body text-center">
-                                                    <span className="avatar-30 rounded-circle bg-primary d-inline-block mr-2" >
-                                                        <i className="ri-heart-fill"></i>
-                                                    </span><span>
-                                                        Thêm vào danh sách yêu thích
-                                                    </span>
-                                                </button>
-                                            </div>
+                                            {
+                                                userData.user._id && <div className="mb-3">
+                                                    <button onClick={() => handleAddToWishlist(apiData)} className="btn text-body text-center">
+                                                        <span className="avatar-30 rounded-circle bg-primary d-inline-block mr-2" >
+                                                            <i className="ri-heart-fill"></i>
+                                                        </span><span>
+                                                            Thêm vào danh sách yêu thích
+                                                        </span>
+                                                    </button>
+                                                </div>
+                                            }
+
                                             <div className="iq-social d-flex align-items-center">
                                                 <h5 className="mr-2">Chia sẻ:</h5>
                                                 <ul

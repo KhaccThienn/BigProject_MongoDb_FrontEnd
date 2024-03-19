@@ -42,7 +42,6 @@ function Shop() {
                 <div className="col-lg-12">
                     <div className="iq-card-transparent mb-0">
                         <div className="d-block text-center">
-                            <h2 className="mb-3">Search by Book Name</h2>
                             <div className="w-100 iq-search-filter">
                                 <ul
                                     className="list-inline p-0 m-0 row justify-content-center search-menu-options"
